@@ -19,7 +19,7 @@ This project integrates [scrcpy](https://github.com/Genymobile/scrcpy) with [KDE
 ## Installation
 1. Clone this repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/kdeconnect-scrcpy.git
+   git clone https://github.com/MAKHMUDuz/kdeconnect-scrcpy.git
    cd kdeconnect-scrcpy
    ```
 2. Run the installer:
