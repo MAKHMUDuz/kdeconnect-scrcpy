@@ -35,5 +35,23 @@ This project integrates [scrcpy](https://github.com/Genymobile/scrcpy) with [KDE
 4. Click the "overflow" (3 dots) menu next to your device.
 5. Select **Share Screen**.
 
+The applet resolves the helper script as `~/bin/phone` at runtime, so the
+installation works for every user instead of one hard-coded home directory.
+
+## Troubleshooting
+
+- **Nothing happens when I click "Share Screen"**
+  Check `~/.cache/kdeconnect-scrcpy.log`. The script writes the detected IP,
+  the `adb connect` result and any `scrcpy` error there.
+- **"No phone detected or not reachable"**
+  Open KDE Connect and make sure the phone is paired and reachable. The
+  script reads the IP from `kdeconnect-cli -a`.
+- **`adb connect` fails**
+  Enable Wireless debugging on the phone, or connect it over USB once and run
+  `adb tcpip 5555`. Some ROMs use a different port; the script uses 5555.
+- **The menu entry is missing after a KDE Connect update**
+  Re-run `./install.sh`. The installer keeps a backup of the original file at
+  `DeviceDelegate.qml.orig` and re-applies the patch.
+
 ---
 Developed by **Mahmudjon Murodov**

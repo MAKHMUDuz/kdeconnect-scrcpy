@@ -36,6 +36,10 @@ PlasmaComponents.ItemDelegate {
 
     readonly property KDEConnect.DeviceDbusInterface device: KDEConnect.DeviceDbusInterfaceFactory.create(model.deviceId)
 
+    // Resolve the script at runtime instead of baking one user's home
+    // directory into the applet. The installer always puts it in ~/bin.
+    readonly property string phoneScript: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0] + "/bin/phone"
+
     hoverEnabled: false
     down: false
 
@@ -162,9 +166,9 @@ PlasmaComponents.ItemDelegate {
         // Phone Mirror (Added locally)
         PlasmaExtras.MenuItem {
             icon: "phone"
-            text: "Share Screen"
+            text: i18n("Share Screen")
             onClicked: {
-                executable.connectSource("/home/mahmud/bin/phone")
+                executable.connectSource(root.phoneScript)
             }
         }
     }
