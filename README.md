@@ -27,6 +27,18 @@ This project integrates [scrcpy](https://github.com/Genymobile/scrcpy) with [KDE
    chmod +x install.sh
    ./install.sh
    ```
+   Use `./install.sh --no-restart` if you do not want the installer to restart
+   Plasma, and `./install.sh --help` for the full option list.
+
+## Uninstall
+```bash
+./install.sh --uninstall
+```
+
+The uninstaller restores the original `DeviceDelegate.qml` from the backup the
+installer made, restores or removes `~/bin/phone`, removes the application
+menu entry and the `PATH` line it added. The local plasmoid copy itself is
+left in place because it may contain your own changes.
 
 ## Usage
 1. Connect your phone via USB once and run `adb tcpip 5555`.
