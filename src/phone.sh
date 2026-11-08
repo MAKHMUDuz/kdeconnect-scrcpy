@@ -52,6 +52,24 @@ KDECONNECT_CLI=$(find_tool kdeconnect-cli) || {
     exit 1
 }
 
+# ADB-over-TCP port. The classic "adb tcpip" port is 5555. Android 11+
+# wireless debugging uses a random port instead, which changes after every
+# reboot. Override the default with ADB_PORT or, more convenient for the
+# Plasma tray button, by writing the port to ~/.config/kdeconnect-scrcpy/port.
+PORT_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/kdeconnect-scrcpy/port"
+if [ -s "$PORT_FILE" ]; then
+    ADB_PORT=$(head -n1 "$PORT_FILE" | tr -d '[:space:]')
+    log "ADB port: $ADB_PORT (from $PORT_FILE)"
+else
+    ADB_PORT="${ADB_PORT:-5555}"
+fi
+case "$ADB_PORT" in
+    ''|*[!0-9]*)
+        notify_error "Invalid ADB port '$ADB_PORT'. Put a number in $PORT_FILE or the ADB_PORT variable."
+        exit 1
+        ;;
+esac
+
 log "Starting screen mirror"
 
 # `kdeconnect-cli -a` prints one line per reachable device, for example:
@@ -68,10 +86,11 @@ log "Phone IP: $IP"
 
 # adb connect is idempotent. A failure is not fatal: the device may already
 # be connected over USB, or the user may have set up a different port.
-"$ADB" connect "$IP:5555" || log "adb connect failed; continuing"
+log "Connect target: $IP:$ADB_PORT"
+"$ADB" connect "$IP:$ADB_PORT" || log "adb connect failed; continuing"
 
 sleep 1
 
-"$SCRCPY" -s "$IP:5555" --video-bit-rate=12M --max-fps=60 \
+"$SCRCPY" -s "$IP:$ADB_PORT" --video-bit-rate=12M --max-fps=60 \
     --window-title="Phone Mirror ($IP)" \
     || notify_error "Could not start scrcpy. Enable Wireless debugging / ADB over TCP on the phone."
