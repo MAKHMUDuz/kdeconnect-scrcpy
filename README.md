@@ -37,3 +37,4 @@ This project integrates [scrcpy](https://github.com/Genymobile/scrcpy) with [KDE
 
 ---
 Developed by **Mahmudjon Murodov**
+Last modified: 2026-11-20
